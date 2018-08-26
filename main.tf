@@ -3,7 +3,7 @@
 
  * AWS Step functions calls lambda functions to perform manual backups of RDS. Cloudwatch event schedule triggers the step functions.
  *
-
+ *
  * ## Doc generation
  * Documentation should be modified within `main.tf` and generated using [terraform-docs](https://github.com/segmentio/terraform-docs). Generate them like so:
  * 
@@ -31,6 +31,134 @@
  * * Cloudwatch event scheduler will trigger step functions.
  * * Step functions will call several lambda functions one by one. One to create snapshot and the other two to manage the snapshots, that is to delete the snapshots that are older than given retention period.
  * * As of now, daily, weekly and  monthly snapshots are supported. Allowed values in snapshot: daily, weekly, monthly.
+ *
+ * ## IAM policies
+ *
+ *
+ * ### Cloudwatch event rule
+ *
+ * Trust Relationshiop
+ * ```
+ * {
+ *   "Version": "2012-10-17",
+ *   "Statement": [
+ *     {
+ *       "Sid": "",
+ *       "Effect": "Allow",
+ *       "Principal": {
+ *         "Service": "events.amazonaws.com"
+ *       },
+ *       "Action": "sts:AssumeRole"
+ *     }
+ *   ]
+ * }
+ * ```
+ *
+ * Permission
+ *
+ * ```
+ * {
+ *     "Version": "2012-10-17",
+ *     "Statement": [
+ *         {
+ *             "Sid": "CloudWatchEventsInvocationAccess",
+ *             "Effect": "Allow",
+ *             "Action": [
+ *                 "states:StartExecution"
+ *             ],
+ *             "Resource": "*"
+ *         }
+ *     ]
+ * }
+ * ```
+ *
+ * ### Step functions
+ *
+ * Trust Relationship
+ * ```
+ * {
+ *   "Version": "2012-10-17",
+ *   "Statement": [
+ *     {
+ *       "Effect": "Allow",
+ *       "Principal": {
+ *         "Service": "states.amazonaws.com"
+ *       },
+ *       "Action": "sts:AssumeRole"
+ *     }
+ *   ]
+ * }
+ * ```
+ *
+ * Permission
+ * ```
+ * {
+ *     "Version": "2012-10-17",
+ *     "Statement": [
+ *         {
+ *             "Sid": "",
+ *             "Effect": "Allow",
+ *             "Action": [
+ *                 "lambda:InvokeFunction"
+ *             ],
+ *             "Resource": [
+ *                 "*"
+ *             ]
+ *         }
+ *     ]
+ * }
+ * ```
+ *
+ * ### Lambda functions
+ *
+ * Trust Relationship
+ *
+ * ```
+ * {
+ *   "Version": "2012-10-17",
+ *   "Statement": [
+ *     {
+ *       "Effect": "Allow",
+ *       "Principal": {
+ *         "Service": "lambda.amazonaws.com"
+ *       },
+ *       "Action": "sts:AssumeRole"
+ *     }
+ *   ]
+ * }
+ * ```
+ *
+ * Permission
+ * ```
+ * {
+ *     "Version": "2012-10-17",
+ *     "Statement": [
+ *         {
+ *             "Sid": "",
+ *             "Effect": "Allow",
+ *             "Action": [
+ *                 "rds:AddTagsToResource",
+ *                 "rds:CopyDBSnapshot",
+ *                 "rds:CopyDBClusterSnapshot",
+ *                 "rds:DeleteDBSnapshot",
+ *                 "rds:CreateDBSnapshot",
+ *                 "rds:CreateDBClusterSnapshot",
+ *                 "rds:ModifyDBClusterSnapshotAttribute",
+ *                 "rds:ModifyDBSnapshotAttribute",
+ *                 "rds:RestoreDBInstanceFromDBSnapshot",
+ *                 "rds:Describe*",
+ *                 "rds:ListTagsForResource",
+ *                 "logs:CreateLogGroup",
+ *                 "logs:CreateLogStream",
+ *                 "logs:PutLogEvents"
+ *             ],
+ *             "Resource": [
+ *                 "*"
+ *             ]
+ *         }
+ *     ]
+ * }
+ * ```
  *
  * ## A real sample to use this module with terragrunt
  *
