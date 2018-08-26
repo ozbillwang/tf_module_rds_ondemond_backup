@@ -23,7 +23,7 @@
  *
  * Two step functions. One for backing up RDS non-aurora instances and the other for aurora instance. Lambda functions are generic enough to work for any flovour of rds.
  *
- * Same backup rotetion is applied to all rds instances, include cluster instances.
+ * Same backup retention is applied to all rds instances, include cluster instances.
  *
  * ## How it works ##
  *

@@ -22,7 +22,7 @@ Go through this README [Test lambda function locally](./test/README.md)
 
 Two step functions. One for backing up RDS non-aurora instances and the other for aurora instance. Lambda functions are generic enough to work for any flovour of rds.
 
-Same backup rotetion is applied to all rds instances, include cluster instances.
+Same backup retention is applied to all rds instances, include cluster instances.
 
 ## How it works ##
 
@@ -33,7 +33,7 @@ Same backup rotetion is applied to all rds instances, include cluster instances.
 
 ## A real sample to use this module with terragrunt
 
-https://github.com/ozbillwang/terragrunt_sample/config-np/ap-southeast-2/dev/rds_ondemond_backup
+https://github.com/ozbillwang/terragrunt_sample/tree/master/config-np/ap-southeast-2/dev/rds_ondemond_backup
 
 
 

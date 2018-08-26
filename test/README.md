@@ -16,8 +16,6 @@ pip install python-lambda-local
 }
 ```
 
-* run amp2aws to get aws assume role
-
 * test locally
 
 ```
