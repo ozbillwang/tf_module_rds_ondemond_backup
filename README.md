@@ -195,7 +195,7 @@ State machine definition
 
 ## A real sample to use this module with terragrunt
 
-https://github.com/ozbillwang/terragrunt_sample/config-np/ap-southeast-2/dev/rds_ondemond_backup
+https://github.com/ozbillwang/terragrunt_sample/tree/master/config-np/ap-southeast-2/dev/rds_ondemond_backup
 
 
 
