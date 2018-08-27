@@ -160,6 +160,40 @@
  * }
  * ```
  *
+ * ## aws step functions
+ *
+ * Create a Serverless Workflow with [AWS Step Functions](https://aws.amazon.com/getting-started/tutorials/create-a-serverless-workflow-step-functions-lambda/) and AWS Lambda
+ *
+ * * task 1: Create-RDS-Snapshot
+ * * task 2: Delete-Old-RDS-Snapshots
+ * * task 3: Delete-Old-RDS-Cluster-Snapshots
+ *
+ * State machine definition
+ *
+ * ```
+ * {
+ *   "Comment": "Manages lifecycle of rds snapshots.",
+ *   "StartAt": "Create-RDS-Snapshot",
+ *   "States": {
+ *     "Create-RDS-Snapshot": {
+ *       "Type": "Task",
+ *       "Resource": "${aws_lambda_function.create_snapshot_lambda_function.arn}",
+ *       "Next": "Delete-Old-RDS-Snapshots"
+ *     },
+ *     "Delete-Old-RDS-Snapshots": {
+ *       "Type": "Task",
+ *       "Resource": "${aws_lambda_function.manage_snapshot_lambda_function.arn}",
+ *       "Next": "Delete-Old-RDS-Cluster-Snapshots"
+ *     },
+ *     "Delete-Old-RDS-Cluster-Snapshots": {
+ *       "Type": "Task",
+ *       "Resource": "${aws_lambda_function.manage_cluster_snapshot_lambda_function.arn}",
+ *       "End": true
+ *     }
+ *   }
+ *  }
+ * ```
+ *
  * ## A real sample to use this module with terragrunt
  *
  * https://github.com/ozbillwang/terragrunt_sample/config-np/ap-southeast-2/dev/rds_ondemond_backup
