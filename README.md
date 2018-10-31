@@ -2,6 +2,17 @@
 
 AWS Step functions calls lambda functions to perform manual backups of RDS. Cloudwatch event schedule triggers the step functions.
 
+## Why need this feature?
+
+If you delete RDS instance without final snapshot, all automation backups for this rds instance will be deleted. You have the risk to lost data. `Only manually created DB Snapshots are retained after the DB Instance is deleted.`
+
+https://aws.amazon.com/rds/faqs/
+
+>Q: What happens to my backups and DB snapshots if I delete my DB instance?
+
+>When you delete a DB instance, you can create a final DB snapshot upon deletion; if you do, you can use this DB snapshot to restore the deleted DB instance at a later date. Amazon RDS retains this final user-created DB snapshot along with all other manually created DB snapshots after the DB instance is deleted. Refer to the pricing page for details of backup storage costs.
+
+>Automated backups are deleted when the DB instance is deleted. Only manually created DB Snapshots are retained after the DB Instance is deleted.
 
 ## Doc generation
 Documentation should be modified within `main.tf` and generated using [terraform-docs](https://github.com/segmentio/terraform-docs). Generate them like so:
